@@ -1,16 +1,38 @@
-# React + Vite
+# Word2Sentence — Frontend Web Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React + Vite single-page application client for the **Word2Sentence** vocabulary platform. It utilizes Tailwind CSS, custom glassmorphism components, and Framer Motion micro-animations to deliver a modern, premium design aesthetic.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Getting Started
 
-## React Compiler
+### 1. Installation
+Navigate to this directory and install dependencies:
+```bash
+npm install --legacy-peer-deps
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Environment Variables
+Create a local `.env` file mapping to your API port (by default `5000`):
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
-## Expanding the ESLint configuration
+### 3. Development Server
+Run the local hot-reloading development server:
+```bash
+npm run dev
+```
+Open `http://localhost:5173` in your browser.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 4. Code Formatting & Linting
+Enforce style and code quality rules:
+*   Lint: `npm run lint`
+*   Auto-Format: `npm run format`
+
+### 5. Production Build
+Prepare build artifacts for static hosting deployment:
+```bash
+npm run build
+```
+The compiled files will compile into the `dist/` directory.
