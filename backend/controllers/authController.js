@@ -149,8 +149,79 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Social OAuth Login (Simulated)
+// @route   POST /api/auth/social-login
+// @access  Public
+const socialLogin = asyncHandler(async (req, res) => {
+  const { email, username, provider, providerId } = req.body;
+
+  // 1. Validation
+  if (!email || !username || !provider || !providerId) {
+    res.status(400);
+    throw new Error('Missing required social login parameters');
+  }
+
+  // 2. Find if user exists by email
+  let user = await User.findOne({ email: email.toLowerCase() });
+
+  if (user) {
+    // User exists - log them in
+    res.status(200).json({
+      success: true,
+      message: `Successfully logged in via ${provider}`,
+      data: {
+        token: generateToken(user._id),
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          level: user.level,
+          xp: user.xp,
+          streak: user.streak,
+        },
+      },
+    });
+  } else {
+    // User does not exist - register them
+    // Check if username is already taken
+    let finalUsername = username.trim().replace(/\s+/g, '_');
+    const usernameExists = await User.findOne({ username: finalUsername });
+    if (usernameExists) {
+      // Append a random 4-digit number to guarantee uniqueness
+      finalUsername = `${finalUsername}_${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
+    // Generate a strong placeholder password
+    const randomPassword = Math.random().toString(36).slice(-10) + 'A1!';
+
+    user = await User.create({
+      username: finalUsername,
+      email: email.toLowerCase(),
+      password: randomPassword,
+      level: 'Beginner', // default track
+    });
+
+    res.status(201).json({
+      success: true,
+      message: `Successfully registered and logged in via ${provider}`,
+      data: {
+        token: generateToken(user._id),
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          level: user.level,
+          xp: user.xp,
+          streak: user.streak,
+        },
+      },
+    });
+  }
+});
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  socialLogin,
 };

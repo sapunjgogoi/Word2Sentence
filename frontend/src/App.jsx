@@ -4,6 +4,7 @@ import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import MockAuth from './pages/MockAuth';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -70,6 +71,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+        <Route path="/mock-auth" element={<MockAuth />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

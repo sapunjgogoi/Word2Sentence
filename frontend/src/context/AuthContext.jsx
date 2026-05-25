@@ -83,8 +83,33 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Social Login (Google, Apple, GitHub)
+  const socialLogin = async (email, username, provider, providerId) => {
+    try {
+      const response = await API.post('/auth/social-login', {
+        email,
+        username,
+        provider,
+        providerId,
+      });
+      if (response.data?.success) {
+        const { token, user: newUser } = response.data.data;
+        localStorage.setItem('token', token);
+        setUser(newUser);
+        return { success: true };
+      }
+      return { success: false, message: response.data?.message || 'Social login failed' };
+    } catch (err) {
+      console.error('Social login failed:', err);
+      return {
+        success: false,
+        message: err.response?.data?.message || err.message || 'Social login error',
+      };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, socialLogin }}>
       {children}
     </AuthContext.Provider>
   );
