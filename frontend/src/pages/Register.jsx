@@ -93,7 +93,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Min 6 characters"
+              placeholder="Min 8 chars (mixed case, number, symbol)"
               className="w-full px-4 py-3 bg-customInput border border-borderSlate rounded-lg focus:outline-none focus:border-cobaltBlue text-textMain transition-colors"
             />
           </div>

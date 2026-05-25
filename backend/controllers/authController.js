@@ -34,10 +34,13 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Please enter a valid email address');
   }
 
-  // Password constraint validation
-  if (password.length < 6) {
+  // Password constraint validation (minimum 8 characters, at least one uppercase, one lowercase, one number, and one special character)
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+  if (!passwordRegex.test(password)) {
     res.status(400);
-    throw new Error('Password must be at least 6 characters');
+    throw new Error(
+      'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#).'
+    );
   }
 
   // 2. Check if user already exists
