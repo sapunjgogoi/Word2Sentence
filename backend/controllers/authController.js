@@ -90,16 +90,23 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body; // 'email' holds the username or email string from the client
 
   // 1. Validation
   if (!email || !password) {
     res.status(400);
-    throw new Error('Please provide email and password');
+    throw new Error('Please provide username/email and password');
   }
 
-  // 2. Find user & Compare passwords
-  const user = await User.findOne({ email });
+  // 2. Find user by email OR username (case-insensitive)
+  const identifier = email.trim();
+  const user = await User.findOne({
+    $or: [
+      { email: identifier.toLowerCase() },
+      { username: { $regex: new RegExp('^' + identifier + '$', 'i') } },
+    ],
+  });
+
   if (user && (await user.comparePassword(password))) {
     res.status(200).json({
       success: true,
@@ -118,7 +125,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error('Invalid email or password');
+    throw new Error('Invalid username/email or password');
   }
 });
 
